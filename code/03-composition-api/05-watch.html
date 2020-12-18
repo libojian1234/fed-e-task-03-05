@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <p>
+            请问一个 yes/no 的问题
+            <input type="text" v-model="question">
+        </p>
+        <p>{{ answer }}</p>
+    </div>
+</body>
+<script type="module">
+    // watch
+    // watch的三个参数
+    // 1. 要监听的数据 2. 监听到数据的变化后执行的函数，这个函数有两个参数分别是新值和旧值 3. 选项对象，deep 和 immediate
+    // watch的返回值，取消监听的函数
+
+    // http://www.yesno.wtf/api
+    import { createApp, ref, watch } from './node_modules/vue/dist/vue.esm-browser.js'
+
+    createApp({
+        setup() {
+            const question = ref('')
+            const answer = ref('')
+
+            watch(question, async (newValue, oldValue) => {
+                const response = await fetch('http://www.yesno.wtf/api')
+                answer.value = await response.json()
+            })
+
+            return {
+                question,
+                answer
+            }
+        }
+    }).mount('#app')
+</script>
+
+</html>
